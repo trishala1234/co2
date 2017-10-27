@@ -1,0 +1,13 @@
+links
+
+http://jasonwatmore.com/post/2016/06/22/nodejs-setup-simple-http-server-local-web-server
+https://scotch.io/tutorials/angularjs-best-practices-directory-structure
+https://scotch.io/tutorials/angular-routing-using-ui-router
+https://www.google.co.in/search?q=white+color+smoke+emitting+vehicles+comic&safe=active&tbm=isch&tbs=rimg:CSGPOW6VkE42IjiUpzIydaMk8ysh1ZvQvUqq1SoZe9PzoBGJdyW6CaxKamEoDXqgDihhDOyDiRc7lh9NzdLdy15GLCoSCZSnMjJ1oyTzERanh_1jL8NSbKhIJKyHVm9C9SqoRm30-LQMC4HUqEgnVKhl70_1OgERGJS9Q5XD8AASoSCYl3JboJrEpqEXfLgbZXNsrOKhIJYSgNeqAOKGER65oNv3QOwjwqEgkM7IOJFzuWHxF4XCpc4h65iCoSCU3N0t3LXkYsEbDqdlG-0yIg&tbo=u&sa=X&ved=0ahUKEwijquq5yY7XAhVFrI8KHTHOAywQ9C8IHw&biw=1366&bih=613&dpr=1#imgdii=m3LwvEAtJtAMMM:&imgrc=b3HGZp18Md8EtM:
+
+websites examples
+
+http://www.niceoneilike.com/
+https://www.google.co.in/search?q=funky+websites&safe=active&tbm=isch&tbs=rimg:CfFyioXFYDNmIjiCF_1vPLHylg4odXkkHOCbDBN1W7TeBl7vgtJDnnYMxSGoFBUvzPSWK0cA9N0QeIKdl9dtOUrWYNyoSCYIX-88sfKWDEce6_1gRZ5bwoKhIJih1eSQc4JsMRm2QYIzamZHMqEgkE3VbtN4GXuxE_10KXFbJvSGyoSCeC0kOedgzFIEamo73rj69ROKhIJagUFS_1M9JYoRqRBbYuhknNAqEgnRwD03RB4gpxE6qiZau66EGioSCWX1205StZg3EdhTUItyXyka&tbo=u&sa=X&ved=0ahUKEwihhML2vI7XAhWBso8KHRLdAOgQ9C8IHw&biw=1366&bih=613&dpr=1
+
+http://localhost:8080/#/home
