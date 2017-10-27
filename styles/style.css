@@ -1,0 +1,89 @@
+body{
+	background:#fd8b49;
+	font-family: 'Dosis', sans-serif;
+}
+
+.header{
+	//background: #291e1e;
+	color:white;
+	padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#howMuchText{
+	display: inline-block;
+    width: auto;
+    vertical-align: middle;
+    margin-right: 1%;
+}
+
+#co2ImageWrap{
+	display: inline-block;
+    width: auto;	
+}
+
+#co2ImageWrap img{
+	width:76px;
+}
+
+.rightBlock, .leftBlock{
+	display:inline-block;
+	vertical-align: top;
+}
+
+.rightBlock img{
+	/*background-image: url('../images/carSmokeCropped.png');
+	background-size: 100%;
+	height:900px;
+	background-repeat: no-repeat;*/
+	width:100%;
+}
+
+#questionText{
+	display: block;
+    width: 100%;
+    font-size: 50px;
+    text-align: center;	
+}
+
+.actionButtons{
+	background-image: url('../images/co2_3.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 14%;
+}
+
+
+#actionButtonsWrapper{
+	margin-top: 30px;
+    text-align: center;
+}
+    
+
+#actionButtonsWrapper button{
+	background: white;
+    width: 21%;
+    height: 38px;
+    cursor: pointer;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: inset 0 0 0 0 #31302B;
+	-webkit-transition: all ease 0.8s;
+	-moz-transition: all ease 0.8s;
+	transition: all ease 0.8s;
+}
+
+#actionButtonsWrapper button:hover{
+	box-shadow: inset 0 100px 0 0 #31302B;
+    color: #FFF;
+    border: 1px solid #31302B;
+}
+
+
+#checkNowBtn{
+	margin-right: 1%;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Dosis|Merriweather">
+		<link rel="stylesheet" href="styles/style.css">
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js"></script>
+		<script src="app.js"></script>
+	</head>
+	<body ng-app="myApp">
+		<div class="container-fluid">
+		  <div class="row header">
+		  	<div class="col-lg-12">
+		  		<span id="howMuchText">HOW MUCH</span><span id="co2ImageWrap"><img src="images/co2_3.png"></span> 
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-lg-12 contentBody">
+		  		<div ui-view></div>
+		  		<!-- <div class="col-lg-6 rightBlock">
+		  			<img src="images/carSmokeCropped.png">
+		  		</div>
+		  		<div class="col-lg-6 leftBlock">
+		  			<div id="questions">
+		  				<span id="questionText">
+		  					Curious to know how much you contribute to CO2 emissions when you travel?
+		  				</span>
+		  				<div id="actionButtonsWrapper">
+		  					<button type="button" id="checkNowBtn" class="btn">Check Now</button>
+		  					<button type="button" id="checkLaterBtn" class="btn">Check Later</button>
+		  				</div>
+		  			</div>
+		  		</div> -->
+		  	</div>
+		  </div>
+		  
+		</div>
+	</body>
+</html>
