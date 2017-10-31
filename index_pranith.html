@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>How Much CO2?</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <style>
+    #map {
+      height: 100%;
+      width:65%;
+      float:left;
+    }
+
+    #displayRoutes {
+      height: 100%;
+      width:35%;
+      vertical-align: bottom;
+      float:right;
+    }
+
+    #summary {
+      text-align: left;
+      width: 60%;
+      margin: auto;
+    }
+
+    #button2 {
+      width: 70%;
+      margin:auto;
+      height: auto;
+      display: table-cell;
+      vertical-align: bottom;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .controls {
+      margin-top: 10px;
+      border: 1px solid transparent;
+      border-radius: 2px 0 0 2px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      height: 32px;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    #origin-input,
+    #destination-input {
+      background-color: #fff;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      margin-left: 12px;
+      padding: 0 11px 0 13px;
+      text-overflow: ellipsis;
+      width: 200px;
+    }
+
+    #origin-input:focus,
+    #destination-input:focus {
+      border-color: #4d90fe;
+    }
+
+    #mode-selector {
+      color: #fff;
+      background-color: #4d90fe;
+      margin-left: 12px;
+      padding: 5px 11px 0px 11px;
+    }
+
+    #mode-selector label {
+      font-family: Roboto;
+      font-size: 13px;
+      font-weight: 300;
+    }
+  </style>
+</head>
+<body>
+  <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location">
+  <input id="destination-input" class="controls" type="text" placeholder="Enter a destination location">
+
+  <div id="map"></div>
+
+  <div id="displayRoutes" align="center">
+    <h1 align="centre" style="padding:10px;" >Welcome to howmuchCO2?</h1>
+    <div id="promptText">
+      <h3 id="summary" >To find out the environmental effect of your travel, enter <b>to</b> and <b>from</b> destinations.</h3>
+      <button id="button2" type="button" onclick="buttonClick()" style="padding:20px;width: 75%;text-align: center;margin-top: 40%;" class="btn btn-primary btn-lg">Show Me the Impact of My Commute</button>
+    </div>
+
+    <div id="tableData" style="text-align: left;padding: 0px 10px 10px 20px;">
+      <table id="myTable"></table>
+    </div>
+    <img src="logo.jpg" height="100px" style="position:absolute;bottom:0px;right:0px;z-index: -1;" />
+  </div>
+  <script>
+  
+  var highlitedDirectionRenderer;
+  
+    var carRoutes=[];
+    var busRoutes=[];
+    var trainRoutes=[];
+
+    $(document).ready(function(){
+
+      $('#promptText').show();
+      $('#tableData').hide();
+      $('#button2').prop('disabled', true);
+
+    });
+
+    function populateData()
+    {
+      $("#myTable td").remove(); 
+      $("#myTable th").remove(); 
+      $("#myTable tr").remove(); 
+
+      var table = document.getElementById("myTable");
+
+      var header = table.createTHead();
+      var hrow = header.insertRow(-1);
+      var hcell = hrow.insertCell(-1);
+      hcell.innerHTML = "<h2>Car</h2>";
+
+      var row = table.insertRow(-1);
+      var i=1;
+      if(carRoutes.length>0)
+      {
+        carRoutes.forEach(function(pair) {
+			var entry=pair.route;
+          var cell = row.insertCell(-1);
+			
+			cell.addEventListener("mouseover", function()
+			{
+				pair.display.setOptions({polylineOptions: {
+    strokeColor: '#FFFF99',
+    strokeOpacity: 1,
+    strokeWeight: 10,
+	zIndex: 1000
+    }}); 
+	
+		pair.display.setMap(map);
+				cell.setAttribute("style", "background-color:#FFFF99;border-radius:10px;")
+			}, false);
+			
+			cell.addEventListener("mouseout", function()
+			{
+				
+				pair.display.setOptions({polylineOptions: {
+    strokeColor: '#0000FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 6,
+	zIndex: 1
+    }}); 
+			pair.display.setMap(map);
+				cell.setAttribute("style", "background-color:white;")
+			}, false);
+		  
+          cell.innerHTML="<div class='cellDiv' style='padding-left: 5px;padding-right: 5px;align-items: center;text-align: center;'><i class='material-icons' style='font-size:40px;color:white;padding:5px;background-color:cornflowerblue;border-radius:25px;'>directions_car</i><br/>"+"Route "+(i++)+"<br/>CO2: "+(((entry.legs[0].distance.value)/1609.34)*.394).toFixed(1)+" kg</div>";
+        });
+      }
+      else
+      {
+        var cell = row.insertCell(-1);
+        cell.innerHTML="<p>No route found.</p>";
+      }
+
+      header = table.createTHead();
+      hrow = header.insertRow(-1);     
+      hcell = hrow.insertCell(-1);
+      hcell.innerHTML = "<h2>Bus</h2>";
+
+      row = table.insertRow(-1);
+      i=1;
+      if(busRoutes.length>0)
+      {
+        busRoutes.forEach(function(pair) {
+			var entry=pair.route;
+          var cell = row.insertCell(-1);
+			
+			cell.addEventListener("mouseover", function()
+			{
+				pair.display.setOptions({polylineOptions: {
+    strokeColor: '#FFFF99',
+    strokeOpacity: 1,
+    strokeWeight: 10,
+	zIndex: 1000
+    }}); 
+	
+		pair.display.setMap(map);
+				cell.setAttribute("style", "background-color:#FFFF99;border-radius:10px;")
+			}, false);
+			
+			cell.addEventListener("mouseout", function()
+			{
+				
+				pair.display.setOptions({polylineOptions: {
+    strokeColor: '#0000FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 6,
+	zIndex: 1
+    }}); 
+			pair.display.setMap(map);
+				cell.setAttribute("style", "background-color:white;")
+			}, false);
+		  
+          cell.innerHTML="<div class='cellDiv' style='padding-left: 5px;padding-right: 5px;align-items: center;text-align: center;'><i class='material-icons' style='font-size:40px;color:white;padding:5px;background-color:cornflowerblue;border-radius:25px;'>directions_bus</i><br/>"+"Route "+(i++)+"<br/>CO2: "+(((entry.legs[0].distance.value)/1609.34)*.045).toFixed(1)+" kg</div>";
+        });
+      }
+      else
+      {
+        var cell = row.insertCell(-1);
+        cell.innerHTML="<p>No route found.</p>";
+      }
+
+      header = table.createTHead();
+      hrow = header.insertRow(-1);     
+      hcell = hrow.insertCell(-1);
+      hcell.innerHTML = "<h2>Train</h2>";
+
+      row = table.insertRow(-1);
+      i=1;
+      if(trainRoutes.length>0)
+      {
+        trainRoutes.forEach(function(pair) {
+			var entry=pair.route;
+          var cell = row.insertCell(-1);
+			
+			cell.addEventListener("mouseover", function()
+			{
+				pair.display.setOptions({polylineOptions: {
+    strokeColor: '#FFFF99',
+    strokeOpacity: 1,
+    strokeWeight: 10,
+	zIndex: 1000
+    }}); 
+	
+		pair.display.setMap(map);
+				cell.setAttribute("style", "background-color:#FFFF99;border-radius:10px;")
+			}, false);
+			
+			cell.addEventListener("mouseout", function()
+			{
+				
+				pair.display.setOptions({polylineOptions: {
+    strokeColor: '#0000FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 6,
+	zIndex: 1
+    }}); 
+			pair.display.setMap(map);
+				cell.setAttribute("style", "background-color:white;")
+			}, false);
+		  
+          cell.innerHTML="<div class='cellDiv' style='padding-left: 5px;padding-right: 5px;align-items: center;text-align: center;'><i class='material-icons' style='font-size:40px;color:white;padding:5px;background-color:cornflowerblue;border-radius:25px;'>train</i><br/>"+"Route "+(i++)+"<br/>CO2: "+(((entry.legs[0].distance.value)/1609.34)*.100).toFixed(1)+" kg</div>";
+        });
+      }
+      else
+      {
+        var cell = row.insertCell(-1);
+        cell.innerHTML="<p>No route found.</p>";
+      }
+    }
+
+    function buttonClick()
+    {
+      $('#promptText').hide(300);
+      $('#tableData').show(300);
+      populateData();
+    }
+	var map;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        mapTypeControl: false,
+        center: {lat: -33.8688, lng: 151.2195},
+        zoom: 13
+      });
+	  
+      new AutocompleteDirectionsHandler(map);
+    }
+    function AutocompleteDirectionsHandler(map) {
+      this.map = map;
+      this.originPlaceId = null;
+      this.destinationPlaceId = null;
+      this.travelMode = 'DRIVING';
+      var originInput = document.getElementById('origin-input');
+      var destinationInput = document.getElementById('destination-input');
+      var modeSelector = document.getElementById('mode-selector');
+      this.directionsService = new google.maps.DirectionsService;
+      this.directionsDisplay = new google.maps.DirectionsRenderer;
+      this.directionsDisplay.setMap(map);
+
+      var originAutocomplete = new google.maps.places.Autocomplete(
+        originInput, {placeIdOnly: true});
+      var destinationAutocomplete = new google.maps.places.Autocomplete(
+        destinationInput, {placeIdOnly: true});
+
+      this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
+      this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
+
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(destinationInput);
+    }
+
+
+    AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(autocomplete, mode) {
+      var me = this;
+      autocomplete.bindTo('bounds', this.map);
+      autocomplete.addListener('place_changed', function() {
+        var place = autocomplete.getPlace();
+        if (!place.place_id) {
+          window.alert("Please select an option from the dropdown list.");
+          return;
+        }
+        if (mode === 'ORIG') {
+          me.originPlaceId = place.place_id;
+        } else {
+          me.destinationPlaceId = place.place_id;
+        }
+        me.route();
+      });
+
+    };
+
+    var directionDisplays=[];
+    AutocompleteDirectionsHandler.prototype.route = function() {
+
+      if (!this.originPlaceId || !this.destinationPlaceId) {
+        return;
+      }
+      var me = this;
+
+      $('#promptText').show();
+      $('#tableData').hide();
+      
+      carRoutes=[];
+      busRoutes=[];
+      trainRoutes=[];
+
+      directionDisplays.forEach(function(entry) {
+        entry.setMap(null);
+      });
+
+
+      this.directionsService.route({
+        origin: {'placeId': this.originPlaceId},
+        destination: {'placeId': this.destinationPlaceId},
+        travelMode: 'DRIVING',
+        provideRouteAlternatives:true,
+		optimizeWaypoints:true		
+
+      }, function(response, status) {
+        if (status === 'OK') {
+         for (var i = 0, len = response.routes.length; i < len; i++) {
+          var exObj=new Object();
+		  exObj.route=response.routes[i];
+          var obj=new google.maps.DirectionsRenderer({
+            map: me.map,
+            directions: response,
+            routeIndex: i,
+			polylineOptions:{
+    strokeColor: '#0000FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 6
+    }
+          });
+		  exObj.display=obj;
+          directionDisplays.push(obj);
+		  carRoutes.push(exObj);
+        }
+      } 
+    });
+
+      this.directionsService.route({
+        origin: {'placeId': this.originPlaceId},
+        destination: {'placeId': this.destinationPlaceId},
+        travelMode: 'TRANSIT',
+        transitOptions:{modes: ['BUS']},
+        provideRouteAlternatives:true,
+		optimizeWaypoints:true 
+
+      }, function(response, status) {
+        if (status === 'OK') {
+         for (var i = 0, len = response.routes.length; i < len; i++) {
+          var exObj=new Object();
+		  exObj.route=response.routes[i];
+          var obj=new google.maps.DirectionsRenderer({
+            map: me.map,
+            directions: response,
+            routeIndex: i,
+			polylineOptions: {
+    strokeColor: '#0000FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 6
+    }
+          });
+          exObj.display=obj;
+          directionDisplays.push(obj);
+		  busRoutes.push(exObj);
+        }
+      } 
+    });
+
+      this.directionsService.route({
+        origin: {'placeId': this.originPlaceId},
+        destination: {'placeId': this.destinationPlaceId},
+        travelMode: 'TRANSIT',
+        transitOptions:{modes: ['TRAIN']},
+        provideRouteAlternatives:true,
+		optimizeWaypoints:true 
+
+      }, function(response, status) {
+        if (status === 'OK') {
+         for (var i = 0, len = response.routes.length; i < len; i++) {
+          var exObj=new Object();
+		  exObj.route=response.routes[i];
+          var obj=new google.maps.DirectionsRenderer({
+            map: me.map,
+            directions: response,
+            routeIndex: i,
+			polylineOptions: {
+    strokeColor: '#0000FF',
+    strokeOpacity: 0.8,
+    strokeWeight: 6
+    }
+          });
+          exObj.display=obj;
+          directionDisplays.push(obj);
+		  trainRoutes.push(exObj);
+        }
+      } 
+    });
+      $('#button2').prop('disabled', false);
+    };
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxdzCCi7P6CnDRi2b7zB1di9oHwvsmt-M&libraries=places&callback=initMap"
+  async defer></script>
+</body>
+</html>
