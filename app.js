@@ -17,6 +17,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('survey', {
             url:"/survey",
             templateUrl:'templates/survey.html'
+        })
+        .state("commuteMap",{
+            url:"/commuteMap",
+            templateUrl:"templates/commuteMap.html",
+            controller:"commuteMapController"
         });
 
 });
