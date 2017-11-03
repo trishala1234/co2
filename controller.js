@@ -1,5 +1,5 @@
-myApp.controller('carbonEmmissionController', ['$scope', '$http', carbonEmmissionController]);
-function carbonEmmissionController($scope, $http){
+myApp.controller('carbonEmmissionController', ['$scope', '$http', '$state', carbonEmmissionController]);
+function carbonEmmissionController($scope, $http, $state){
 	$scope.showDefault = true;
 	$scope.displayCarType = 'Car Type';
 	$scope.displayCylinders = "No Of Cylinders";
@@ -34,6 +34,16 @@ function carbonEmmissionController($scope, $http){
 		    });
 			$scope.showCylinders = false;
 			$scope.commuteFrequency = true;
+		}
+		else if($scope.commuteFrequency == true){
+			$('#commuteFrequency').fadeOut('slow', function(){
+		        $('#almostDone').fadeIn('slow');
+		    });
+			$scope.commuteFrequency = false;
+			$scope.almostDone = true;
+		}
+		else if($scope.almostDone == true){
+			$state.go('commuteMap');
 		}
 	}
 
