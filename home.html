@@ -1,0 +1,61 @@
+<div class="col-lg-6 rightBlock">
+	<img src="images/carSmokeCropped.png">
+</div>
+<div class="col-lg-6 leftBlock">
+	<div id="contentText" class="commomText">
+		<div id="questionText" class="hidingBlocks">
+			Curious to know how much you contribute to CO2 emissions when you travel?
+		</div>
+		<div id="survey" class="hidingBlocks">
+			<span>
+				Sure! Help us know few things.
+			</span>
+			<div>Choose your car type.</div>
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="carTypeBtn">{{displayCarType}} <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				    <li ng-repeat="cartype in carTypes" ng-click="storeCarType(cartype)"><a href="#">{{cartype}}</a></li>
+				 </ul>
+			</div>
+		</div>
+		<div id="cylinders" class="hidingBlocks">
+			<div>Do you know how many cylinders it has?</div>
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="carTypeBtn">{{displayCylinders}} <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				    <li ng-repeat="num in cylinderNum" ng-click="storeCylinderNum(num)"><a href="#">{{num}}</a></li>
+				 </ul>
+			</div>
+			<div class="popover">
+				<span>
+					That's okay! We will give you an estimated average, but do remember that the exact imapct your car cause may vary.
+				</span>
+			</div>
+		</div>
+		<div id="commuteFrequency">
+			<div>Tell us how frequently do you commute.</div>
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="carTypeBtn">{{displayCommuteFrequency}} <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				    <li ng-repeat="frequency in commuteFrequencyVals" ng-click="storeCommuteFrequency(frequency)"><a href="#">{{frequency}}</a></li>
+				 </ul>
+			</div>
+		</div>
+		<div id="almostDone">
+			<div class="hightlightText">Your almost there!</div>
+			<div>
+				Just a few more inputs from you and we are done.
+			</div>
+		</div>
+		<div id="actionButtonsWrapper">
+			<div ng-show="showDefault">
+				<button type="button" id="checkNowBtn" class="btn" ng-click="showNext(); showNextBtn=true;">Check Now</button>
+				<button type="button" id="checkLaterBtn" class="btn">Check Later</button>
+			</div>
+			<button type="button" id="nextBtn" class="btn" ng-show="showNextBtn" ng-click="showNext()">Next</button>
+			<!-- <div class="actionButtons">Check Now!</div>
+			<div class="actionButtons">Nah, later..</div> -->
+		</div>
+	</div>
+	
+</div>
