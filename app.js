@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ui.router']);
+var myApp = angular.module('myApp', ['ui.router', 'uiGmapgoogle-maps']);
 debugger;
 myApp.config(function($stateProvider, $urlRouterProvider) {
 
@@ -25,3 +25,10 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         });
 
 });
+myApp.config(['uiGmapGoogleMapApiProvider', function (GoogleMapApi) {
+  GoogleMapApi.configure({
+   key: 'AIzaSyC8AqDQnx5gDUzsYWAZIQjfAkCb9CLZkTo',
+   v: '3',
+    libraries: 'weather,geometry,visualization,places'
+  });
+  }])

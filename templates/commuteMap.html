@@ -1,0 +1,16 @@
+<div class="col-lg-6 rightBlock">
+	<img src="images/carSmokeCropped.png">
+</div>
+<div class="col-lg-6 leftBlock">
+	<input id="origin-input" class="controls" type="text"
+        placeholder="Enter an origin location">
+
+    <input id="destination-input" class="controls" type="text"
+        placeholder="Enter a destination location">
+	<div id="mapContainer">
+		<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
+        	<ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
+    	</ui-gmap-google-map>
+	</div>
+</div>
