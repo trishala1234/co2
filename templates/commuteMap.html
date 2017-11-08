@@ -7,6 +7,16 @@
 
     <input id="destination-input" class="controls" type="text"
         placeholder="Enter a destination location">
+    <div id="mode-selector" class="controls">
+      <input type="radio" name="type" id="changemode-walking" checked="checked">
+      <label for="changemode-walking">Walking</label>
+
+      <input type="radio" name="type" id="changemode-transit">
+      <label for="changemode-transit">Transit</label>
+
+      <input type="radio" name="type" id="changemode-driving">
+      <label for="changemode-driving">Driving</label>
+    </div>
 	<div id="mapContainer">
 		<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds" control="map.control">
         	<ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
