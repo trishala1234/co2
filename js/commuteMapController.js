@@ -1,6 +1,10 @@
 myApp.controller("commuteMapController", ['$scope', '$state', 'uiGmapIsReady', commuteMapController]);
 
 function commuteMapController($scope, $state, uiGmapIsReady){
+		$scope.checkMap = function(){
+			jQuery("#mapDetailsModal").show();
+		}
+
 	  $scope.map = {control : {}, center: {latitude: 40.1451, longitude: -99.6680 }, zoom: 4, bounds: {}};
 	  
         $scope.polylines = [];
@@ -26,8 +30,8 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 		        var destinationAutocomplete = new google.maps.places.Autocomplete(
 		            destinationInput, {placeIdOnly: true});
 
-		        this.setupClickListener('changemode-walking', 'WALKING');
-		        this.setupClickListener('changemode-transit', 'TRANSIT');
+		        this.setupClickListener('changemode-bus', 'BUS');
+		        this.setupClickListener('changemode-train', 'TRAIN');
 		        this.setupClickListener('changemode-driving', 'DRIVING');
 
 		        this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
@@ -44,7 +48,19 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         var radioButton = document.getElementById(id);
         var me = this;
         radioButton.addEventListener('click', function() {
-          me.travelMode = mode;
+        	//this.directionsDisplay.setMap(null);
+        	if(mode === "BUS"){
+        		me.travelMode = 'TRANSIT';
+          		me.transitOptions = {modes: ['BUS']};
+        	}
+          	else if(mode === "TRAIN"){
+          		me.travelMode = 'TRANSIT';
+          		me.transitOptions = {modes: ['TRAIN']};
+          	}
+          	else if(mode === "DRIVING"){
+          		me.travelMode = 'DRIVING';
+          		//me.transitOptions = {modes: ['']};
+          	}
           me.route();
         });
       };
@@ -68,20 +84,42 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 
       };
 
-      var directionDisplays=[];
+      var directionsCollection = [];
       AutocompleteDirectionsHandler.prototype.route = function() {
         if (!this.originPlaceId || !this.destinationPlaceId) {
           return;
         }
         var me = this;
 
+        for(var i=0; i<directionsCollection.length; i++){
+        	directionsCollection[i].setMap(null);
+        }
+
         this.directionsService.route({
           origin: {'placeId': this.originPlaceId},
           destination: {'placeId': this.destinationPlaceId},
           travelMode: this.travelMode,
-          provideRouteAlternatives:true
+          transitOptions: this.transitOptions,
+          provideRouteAlternatives:true,
+          optimizeWaypoints:true
         }, function(response, status) {
           if (status === 'OK') {
+
+          	 for (var i = 0, len = response.routes.length; i < len; i++) {
+		          var obj=new google.maps.DirectionsRenderer({
+		            map: me.map,
+		            directions: response,
+		            routeIndex: i,
+					polylineOptions:{
+		    		strokeColor: '#0000FF',
+		    		strokeOpacity: 0.8,
+		    		strokeWeight: 6
+		    		}
+		          });	  
+		          directionsCollection.push(obj);
+        }
+
+
             me.directionsDisplay.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);
@@ -90,70 +128,5 @@ function commuteMapController($scope, $state, uiGmapIsReady){
       };
 
       new AutocompleteDirectionsHandler(map);
-
-          $scope.polylines = [
-            {
-                id: 1,
-                path: [
-                    {
-                        latitude: 45,
-                        longitude: -74
-                    },
-                    {
-                        latitude: 30,
-                        longitude: -89
-                    },
-                    {
-                        latitude: 37,
-                        longitude: -122
-                    },
-                    {
-                        latitude: 60,
-                        longitude: -95
-                    }
-                ],
-                stroke: {
-                    color: 'red',
-                    weight: 3
-                },
-                editable: false,
-                draggable: false,
-                geodesic: true,
-                visible: true,
-                icons: []
-            },
-            {
-                id: 2,
-                path: [
-                    {
-                        latitude: 47,
-                        longitude: -74
-                    },
-                    {
-                        latitude: 32,
-                        longitude: -89
-                    },
-                    {
-                        latitude: 39,
-                        longitude: -122
-                    }
-                ],
-                stroke: {
-                    color: '#6060FB',
-                    weight: 3
-                },
-                editable: false,
-                draggable: false,
-                geodesic: true,
-                visible: true,
-                icons: [{
-                    icon: {
-                        path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
-                    },
-                    offset: '25px',
-                    repeat: '50px'
-                }]
-            }
-        ];
         });
 }
