@@ -1,17 +1,26 @@
 myApp.controller("commuteMapController", ['$scope', '$state', 'uiGmapIsReady', commuteMapController]);
 
 function commuteMapController($scope, $state, uiGmapIsReady){
-		$scope.checkMap = function(){
-			jQuery("#mapDetailsModal").show();
-		}
+
 
 	  $scope.map = {control : {}, center: {latitude: 40.1451, longitude: -99.6680 }, zoom: 4, bounds: {}};
 	  
         $scope.polylines = [];
        uiGmapIsReady.promise().then(function(map_instances){
+       		
        		debugger;
         	var map = $scope.map.control.getGMap();
         	var map2 = map_instances[0].map;
+
+        	$scope.checkMap = function(){
+        		angular.element("#mapDetailsModal").show();
+				google.maps.event.trigger(map_instances[0].map, 'resize');
+				
+			}
+
+			$scope.hideMapModal = function(){
+				angular.element("#mapDetailsModal").hide();
+			}
 
         	function AutocompleteDirectionsHandler(map) {
 		        this.map = map;
@@ -48,7 +57,7 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         var radioButton = document.getElementById(id);
         var me = this;
         radioButton.addEventListener('click', function() {
-        	//this.directionsDisplay.setMap(null);
+        	me.directionsDisplay.setMap(null);
         	if(mode === "BUS"){
         		me.travelMode = 'TRANSIT';
           		me.transitOptions = {modes: ['BUS']};
@@ -90,7 +99,6 @@ function commuteMapController($scope, $state, uiGmapIsReady){
           return;
         }
         var me = this;
-
         for(var i=0; i<directionsCollection.length; i++){
         	directionsCollection[i].setMap(null);
         }
@@ -120,7 +128,7 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         }
 
 
-            me.directionsDisplay.setDirections(response);
+            //me.directionsDisplay.setDirections(response);
           } else {
             window.alert('Directions request failed due to ' + status);
           }

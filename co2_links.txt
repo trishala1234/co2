@@ -11,3 +11,21 @@ http://www.niceoneilike.com/
 https://www.google.co.in/search?q=funky+websites&safe=active&tbm=isch&tbs=rimg:CfFyioXFYDNmIjiCF_1vPLHylg4odXkkHOCbDBN1W7TeBl7vgtJDnnYMxSGoFBUvzPSWK0cA9N0QeIKdl9dtOUrWYNyoSCYIX-88sfKWDEce6_1gRZ5bwoKhIJih1eSQc4JsMRm2QYIzamZHMqEgkE3VbtN4GXuxE_10KXFbJvSGyoSCeC0kOedgzFIEamo73rj69ROKhIJagUFS_1M9JYoRqRBbYuhknNAqEgnRwD03RB4gpxE6qiZau66EGioSCWX1205StZg3EdhTUItyXyka&tbo=u&sa=X&ved=0ahUKEwihhML2vI7XAhWBso8KHRLdAOgQ9C8IHw&biw=1366&bih=613&dpr=1
 
 http://localhost:8080/#/home
+
+https://stackoverflow.com/questions/36639986/how-do-i-add-google-map-in-angular-js-controller
+
+google maps references
+https://rawgit.com/allenhwkim/angularjs-google-maps/master/build/docs/index.html
+
+display alternate routes
+
+https://stackoverflow.com/questions/18974512/how-to-display-alternative-route-using-google-map-api
+
+get instance of google map in angular js
+https://stackoverflow.com/questions/22786918/angularjs-google-map-directive-map-instance
+
+
+Uncaught TypeError: $scope.map.control.getGMap is not a function when click on Map - solution was that i made use of 
+uiGmapIsReady.promise().then. I injected uiGmapIsReady in the controller to be able to make use of it.
+
+https://stackoverflow.com/questions/35348122/uncaught-typeerror-scope-map-control-getgmap-is-not-a-function-when-click-on-m
