@@ -2,6 +2,10 @@ myApp.controller("commuteMapController", ['$scope', '$state', 'uiGmapIsReady', c
 
 function commuteMapController($scope, $state, uiGmapIsReady){
 
+	  $scope.showPreviousState = function(){
+	  		debugger;
+	  		
+	  }
 
 	  $scope.map = {control : {}, center: {latitude: 40.1451, longitude: -99.6680 }, zoom: 4, bounds: {}};
 	  

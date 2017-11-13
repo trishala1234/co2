@@ -50,10 +50,11 @@
 		<div id="actionButtonsWrapper">
 			<div ng-show="showDefault">
 				<button type="button" id="checkNowBtn" class="btn" ng-click="showNext(); showNextBtn=true;">Check Now</button>
-				<button type="button" id="checkLaterBtn" class="btn">Check Later</button>
+				<!--<button type="button" id="checkLaterBtn" class="btn">Check Later</button>-->
 			</div>
 			<button type="button" id="nextBtn" class="btn" ng-show="showNextBtn" ng-click="showNext()">Next</button>
-			<!-- <div class="actionButtons">Check Now!</div>
+			<button type="button" id="nextBtn" class="btn" ng-hide="showCylinders!=true && commuteFrequency != true && almostDone != true" ng-click="showPrevious()">Back</button>
+			<!-- <div class="actionB != trueuttons">Check Now!</div>
 			<div class="actionButtons">Nah, later..</div> -->
 		</div>
 	</div>

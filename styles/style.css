@@ -63,7 +63,7 @@ body{
 }
     
 
-#actionButtonsWrapper button, #checkMapBtn{
+#actionButtonsWrapper button, #checkMapBtn, #showPreviousStateBtn{
 	background: white;
     width: 21%;
     height: 38px;
@@ -77,7 +77,7 @@ body{
 	transition: all ease 0.8s;
 }
 
-#actionButtonsWrapper button:hover, #checkMapBtn:hover {
+#actionButtonsWrapper button:hover, #checkMapBtn:hover, #showPreviousStateBtn:hover {
 	box-shadow: inset 0 100px 0 0 #3a3939;
     color: #FFF;
     border: 1px solid #31302B;
@@ -267,8 +267,12 @@ body{
 		text-align: center;
 	}
 
-	#checkMapBtn{
+	#checkMapBtn, #showPreviousStateBtn{
 		margin-top: 40px;
+	}
+
+	#showPreviousStateBtn{
+		margin-left: 10px;
 	}
 
 	.closeModal{

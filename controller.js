@@ -43,7 +43,35 @@ function carbonEmmissionController($scope, $http, $state){
 			$scope.almostDone = true;
 		}
 		else if($scope.almostDone == true){
+			$scope.almostDone = false;
 			$state.go('commuteMap');
+		}
+	}
+
+
+	//showPrevious functionality
+
+	$scope.showPrevious = function(){
+		if($scope.showCylinders == true){
+			$('#cylinders').fadeOut('slow', function(){
+		        $('#survey').fadeIn('slow');
+		    });
+    		$scope.showCylinders = false;
+			$scope.showCarType = true;
+		}
+		else if($scope.commuteFrequency == true){
+			$('#commuteFrequency').fadeOut('slow', function(){
+		        $('#cylinders').fadeIn('slow');
+		    });
+		    $scope.showCylinders = true;
+		    $scope.commuteFrequency = false;
+		}
+		else if($scope.almostDone == true){
+			$('#almostDone').fadeOut('slow', function(){
+		        $('#commuteFrequency').fadeIn('slow');
+		    });
+			$scope.commuteFrequency = true;
+			$scope.almostDone = false;
 		}
 	}
 
