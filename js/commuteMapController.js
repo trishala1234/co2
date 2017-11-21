@@ -8,13 +8,17 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 	  }
 
 	  $scope.map = {control : {}, center: {latitude: 40.1451, longitude: -99.6680 }, zoom: 4, bounds: {}};
-	  
+	  $scope.routes= [];
         $scope.polylines = [];
+        var currentRoutesSet = [];
+        var directionsCollection = [];
+        var map;
        uiGmapIsReady.promise().then(function(map_instances){
        		
        		debugger;
-        	var map = $scope.map.control.getGMap();
+        	map = $scope.map.control.getGMap();
         	var map2 = map_instances[0].map;
+        	
 
         	$scope.checkMap = function(){
         		angular.element("#mapDetailsModal").show();
@@ -24,6 +28,10 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 
 			$scope.hideMapModal = function(){
 				angular.element("#mapDetailsModal").hide();
+				for(var i=0; i<directionsCollection.length; i++){
+        			directionsCollection[i].setMap(null);
+        		}
+        		map = $scope.map.control.getGMap();
 			}
 
         	function AutocompleteDirectionsHandler(map) {
@@ -97,7 +105,6 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 
       };
 
-      var directionsCollection = [];
       AutocompleteDirectionsHandler.prototype.route = function() {
         if (!this.originPlaceId || !this.destinationPlaceId) {
           return;
@@ -116,7 +123,8 @@ function commuteMapController($scope, $state, uiGmapIsReady){
           optimizeWaypoints:true
         }, function(response, status) {
           if (status === 'OK') {
-
+          	 $scope.routes = response.routes;
+          	 var extraObj = new Object();
           	 for (var i = 0, len = response.routes.length; i < len; i++) {
 		          var obj=new google.maps.DirectionsRenderer({
 		            map: me.map,
@@ -128,6 +136,10 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 		    		strokeWeight: 6
 		    		}
 		          });	  
+
+		          extraObj.route = response.routes[i];
+		          extraObj.display = obj;
+		          currentRoutesSet.push(extraObj);
 		          directionsCollection.push(obj);
         }
 
@@ -141,4 +153,37 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 
       new AutocompleteDirectionsHandler(map);
         });
+
+	//Calculate carbon emissions below
+	$scope.calculateCarbon = function(){
+		$scope.showCalculations = true;
+	}
+
+	//to highlight a route when user hovers over a route
+	$scope.highlightRoute = function($index, $event){
+		var currentRoute = currentRoutesSet[$index];
+		currentRoute.display.setOptions({polylineOptions: {
+		    strokeColor: 'red',
+		    strokeOpacity: 1,
+		    strokeWeight: 3,
+			zIndex: 1000
+    	}}); 
+	
+		currentRoute.display.setMap(map);
+		$event.currentTarget.setAttribute("style", "background-color:#fd8b49;border-radius:10px;")
+	}
+
+
+	//to fade out a route when user hovers over a route
+	$scope.fadeRoute = function($index, $event){
+		var currentRoute = currentRoutesSet[$index];
+		currentRoute.display.setOptions({polylineOptions: {
+			    strokeColor: '#0000FF',
+			    strokeOpacity: 0.8,
+			    strokeWeight: 6,
+				zIndex: 1
+		    }}); 
+			currentRoute.display.setMap(map);
+			$event.currentTarget.setAttribute("style", "background-color:white;")
+	}
 }

@@ -35,4 +35,12 @@
 	    	</ui-gmap-google-map>
 		</div>
 	</div>		
+	<button type="button" id="showCalculationsBtn" class="btn" ng-click="calculateCarbon()" ng-hide="showCalculations">How Much Co2?</button>
+	<div id="calculationsContainer" ng-show="showCalculations">
+		<ul>
+			<li ng-repeat="route in routes" ng-mouseover="highlightRoute($index, $event)" ng-mouseleave="fadeRoute($index, $event)">
+				route{{$index}} {{route.legs[0].arrival_time}}
+			</li>
+		</ul>
+	</div>
 </div>
