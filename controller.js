@@ -5,28 +5,37 @@ function carbonEmmissionController($scope, $http, $state){
 	$scope.displayCylinders = "No Of Cylinders";
 	$scope.displayCommuteFrequency = "Commute Frequency";
 	$scope.showDefault = true;
-	$scope.showNext = function(){
+	$scope.transportMode;
+	$scope.tranModes = ['Bus','Car', 'Train'];
 
-		if($scope.showDefault == true){
-			//jQuery("#questionText").fadeOut(300);
-			//jQuery("#survey").delay(400).fadeIn(300);
-		    $('#questionText').fadeOut('slow', function(){
+	//method to store transport mode.
+	$scope.storeTransportMode = function(mode){
+		$scope.transportMode = mode;
+		if(mode === 'Bus' || mode === 'Train'){
+			$state.go('commuteMap');
+		}
+		else if(mode === 'Car'){
+			$('#questionText').fadeOut('slow', function(){
 		        $('#survey').fadeIn('slow');
 		    });
 			$scope.showDefault = false;
 			$scope.showCarType = true;
 		}
+	}
+
+	$scope.showNext = function(){
+
+		if($scope.showDefault == true){
+		    $state.go('commuteMap');
+			$scope.showDefault = false;
+			
+		}
 		else if($scope.showCarType == true){
-			//jQuery("#survey").animate({height: '0px', width: '0px', opacity: '0.4'}, "slow");
-			//jQuery("#survey").fadeOut(300);
-    		//jQuery("#cylinders").delay(400).fadeIn(300);
     		$('#survey').fadeOut('slow', function(){
 		        $('#cylinders').fadeIn('slow');
 		    });
     		$scope.showCylinders = true;
 			$scope.showCarType = false;
-			//jQuery("#survey").fadeOut('slow');
-			//jQuery("#cylinders").fadeIn('slow');
 		}
 		else if($scope.showCylinders == true){
 			$('#cylinders').fadeOut('slow', function(){
