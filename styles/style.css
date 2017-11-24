@@ -83,23 +83,24 @@ body{
     border: 1px solid #31302B;
 }
 
-#nextBtn:hover{
-	color:white;
-}
-
 
 #checkNowBtn{
 	margin-right: 1%;
 }
 
-
-#actionButtonsWrapper button:hover{
-	color:white;
+.hidingBlocks{
+	width:100%;
+    margin-left: 2%;
+    color: white;
+    padding: 16px;
+    font-size: 18px;
 }
 
-.dropdown{
-	width:31%;
-	margin: 0px auto;
+.hidingBlocks .dropdown{
+	color:black;
+	font-size:14px;
+	width: 47%;
+	margin-top: 20px;
 }
 
 .dropdown button{
@@ -107,7 +108,7 @@ body{
 }
 
 #carTypeBtn{
-	background: #3a3939;
+	//background: #3a3939;
     width: 100%;
     //height: 38px;
     cursor: pointer;
@@ -115,7 +116,7 @@ body{
     letter-spacing: 1px;
     text-transform: uppercase;
     text-align:left;
-    color:white;
+    /*color:white;*/
 }
 
 .caret{
@@ -125,20 +126,42 @@ body{
 	margin-top: 10px;
 }
 
-.dropdown .dropdown-menu{
+/*.dropdown .dropdown-menu{
 	position:relative !important;
 	float: none !important;
 	width:100%;
 	background: #3a3939;
 	color:white;
-}
+}*/
 
-.dropdown .dropdown-menu>li>a{
+
+/*.dropdown .dropdown-menu>li>a{
+	color:white;
+}*/
+
+/*.dropdown .dropdown-menu>li>a:hover{
+	color:black;
+}*/
+
+.hidingBlocks .dropdown .dropdown-menu{
+	//position:relative !important;
+	float: none !important;
+	width:100%;
+	//background: #3a3939;
 	color:white;
 }
 
-.dropdown .dropdown-menu>li>a:hover{
+.hidingBlocks .dropdown .dropdown-menu>li>a{
 	color:black;
+}
+
+.hidingBlocks .dropdown .dropdown-menu>li>a:hover{
+	color:white;
+	background:#3a3939;
+}
+
+.inlinelayout{
+	display:inline-block !important;
 }
 
 .ng-hide {
@@ -151,12 +174,16 @@ body{
     //transform: rotate(180deg);
 }
 
-.hidingBlocks{
+.hidingBlocks, #questionText{
 	-webkit-transition: height 2s; /* Safari */
     transition: height 2s;
 }
 
-#survey, #cylinders, #commuteFrequency, #almostDone{
+/*#survey, #cylindersBlock, #commuteFrequency, #almostDone, #chooseCarTypeBlock{
+	display:none;
+}*/
+
+#questionsWrapper{
 	display:none;
 }
 
@@ -194,7 +221,7 @@ body{
 
 #mapContainer {
     width: 100%;
-    height: 590px;
+    height: 560px;
 }
 
 .angular-google-map-container {
@@ -235,7 +262,7 @@ body{
 
     #mode-selector {
       color: #fff;
-      background-color: #4d90fe;
+      background-color: #000000;
       margin-left: 12px;
       padding: 5px 11px 0px 11px;
     }
@@ -257,7 +284,7 @@ body{
 	    overflow: auto; /* Enable scroll if needed */
 	    background-color: rgb(0,0,0); /* Fallback color */
 	    //background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-	    background-color: rgba(0, 0, 0, 0.81)
+	    background-color:rgba(0, 0, 0, 0.92);
     }
 
     /*.modal-content {
@@ -274,9 +301,10 @@ body{
 		padding: 20px;
 		border: 1px solid #888;
 		width: 60%; /* Could be more or less, depending on screen size */
-		margin-top: 20px;
+		margin-top: 32px;
 		display:inline-block;
 		vertical-align: middle;
+		margin-left: 1%;
 	}
 
 	.centerBlock{
@@ -301,7 +329,9 @@ body{
 	}
 
 	#calculationsContainer{
-		display:inline-block;	
+		display:inline-block;
+		width: 32%;
+    	margin-left: 3%;
 	}
 
 	#showCalculationsBtn{
@@ -321,13 +351,59 @@ body{
 	#calculationsContainer li{
 		list-style: none;
 	    display: inline-block;
-	    background: white;
-	    color: #3a3939;
-	    border: 1px solid #31302B;
-	    margin-right: 14%;
-	    padding: 11px;
+	    margin-right: 4%;
+	    padding: 12px;
 	    margin-bottom: 20px;
 	    cursor: pointer;
 	    z-index: 9999;
+	    color:white;
 	}
+
+	#calculationsContainer .material-icons{
+	    display: block;
+	    //color: #ffffff;
+	    font-size: 36px;
+	}
+
+	#calculationsContainer .routeDetails{
+	    display: block;
+	    margin-top: 20px;
+	    //color:white;
+	}
+
+	#calculationsContainer li:hover{
+		color: #fd8b49;
+		font-weight: bold;
+	}
+
+	#questionsWrapper{
+		width:34%;
+		margin-left: 3%;
+		vertical-align: middle;
+	}
+
+	#nextBtn{
+		background: #fd8b49;
+	    color: #3a3939;
+	    border: 1px solid #31302B;
+	    height: 38px;
+	    cursor: pointer;
+	    font-size: 16px;
+	    letter-spacing: 1px;
+	    text-transform: uppercase;
+	    margin-left: 6%;
+	    margin-top: 15px;
+	    width: 40%;
+	    box-shadow: inset 0 0 0 0 #31302B;
+		-webkit-transition: all ease 0.8s;
+		-moz-transition: all ease 0.8s;
+		transition: all ease 0.8s;
+	}
+
+	#nextBtn:hover{
+		box-shadow: inset 0 100px 0 0 #ffffff;
+	    color: #000000;
+	    border: 1px solid white;
+	}
+	
 	

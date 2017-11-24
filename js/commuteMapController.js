@@ -9,10 +9,18 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 
 	  $scope.map = {control : {}, center: {latitude: 40.1451, longitude: -99.6680 }, zoom: 4, bounds: {}};
 	  $scope.routes= [];
-        $scope.polylines = [];
-        var currentRoutesSet = [];
-        var directionsCollection = [];
-        var map;
+	    $scope.polylines = [];
+	    $scope.showNextBtn = false;
+	    var currentRoutesSet = [];
+	    var directionsCollection = [];
+	    var map;
+	    var travelMode;
+	    $scope.travelModeValue;
+	    $scope.questionsWrapper = false;
+	    $scope.displayCarType = 'Car Type';
+		$scope.displayCylinders = "No Of Cylinders";
+		$scope.displayCommuteFrequency = "Commute Frequency";
+		$scope.carDetailsStored = false;
        uiGmapIsReady.promise().then(function(map_instances){
        		
        		debugger;
@@ -23,7 +31,6 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         	$scope.checkMap = function(){
         		angular.element("#mapDetailsModal").show();
 				google.maps.event.trigger(map_instances[0].map, 'resize');
-				
 			}
 
 			$scope.hideMapModal = function(){
@@ -69,6 +76,8 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         var radioButton = document.getElementById(id);
         var me = this;
         radioButton.addEventListener('click', function() {
+        	travelMode = mode;
+        	$scope.travelModeValue = mode;
         	me.directionsDisplay.setMap(null);
         	if(mode === "BUS"){
         		me.travelMode = 'TRANSIT';
@@ -124,6 +133,14 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         }, function(response, status) {
           if (status === 'OK') {
           	 $scope.routes = response.routes;
+          	 if(travelMode === 'DRIVING' && $scope.showCalculations === true){
+          	 	if($scope.carDetailsStored === false){
+          	 		$scope.showCalculations = false;
+			        $('#questionsWrapper').fadeIn('slow');
+			        $('#questionsWrapper').addClass('inlinelayout');
+		    		$scope.questionsWrapper = true;
+          	 	}
+          	 }
           	 var extraObj = new Object();
           	 for (var i = 0, len = response.routes.length; i < len; i++) {
 		          var obj=new google.maps.DirectionsRenderer({
@@ -154,9 +171,46 @@ function commuteMapController($scope, $state, uiGmapIsReady){
       new AutocompleteDirectionsHandler(map);
         });
 
+	//store the car type
+	$scope.carTypes = ["Gasoline", "Gasoline-hybrid", "Diesel", "Diesel-hybrid", "Natural gas", "Electric Vehicle", "I don't know"]
+	var userCarType;
+	$scope.storeCarType = function(cartype){
+		userCarType = cartype;
+		$scope.displayCarType = cartype;
+		console.log("car type is"+cartype);
+	}
+
+	//store the number of cylinders.
+	$scope.cylinderNum = ["3", "4", "6", "8", "10", "12", "I don't know"],
+	$scope.storeCylinderNum = function(num){
+		if(num == "I don't know"){
+			//angular.element('.popover').fadeIn();
+		}
+		var noOfCylinders = num;
+		$scope.displayCylinders = num;
+		console.log("car type is"+num);
+	}
+
+	//store commute frequency
+	$scope.commuteFrequencyVals = ["Everyday of the year", "About 5 times a week", "About 3 times a week", "Once a week", "About once every two weeks", "About once every 3 weeks", "About once a month", "Just this once" ];
+	$scope.storeCommuteFrequency = function(frequency){
+		var commFrequency = frequency;
+		$scope.displayCommuteFrequency = frequency;
+		console.log("car type is"+frequency);
+	}
+
 	//Calculate carbon emissions below
 	$scope.calculateCarbon = function(){
-		$scope.showCalculations = true;
+		if(travelMode === 'DRIVING' && $scope.carDetailsStored == false){
+				$('#showCalculationsBtn').fadeOut('slow', function(){
+			        $('#questionsWrapper').fadeIn('slow');
+			        $('#questionsWrapper').addClass('inlinelayout');
+		    	});
+		    	$scope.questionsWrapper = true;
+		}
+		else{
+			$scope.showCalculations = true;
+		}
 	}
 
 	//to highlight a route when user hovers over a route
@@ -165,12 +219,12 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 		currentRoute.display.setOptions({polylineOptions: {
 		    strokeColor: 'red',
 		    strokeOpacity: 1,
-		    strokeWeight: 3,
-			zIndex: 1000
+		    strokeWeight: 4,
+			
     	}}); 
 	
 		currentRoute.display.setMap(map);
-		$event.currentTarget.setAttribute("style", "background-color:#fd8b49;border-radius:10px;")
+		//$event.currentTarget.setAttribute("style", "background-color:#fd8b49;border-radius:10px;")
 	}
 
 
@@ -179,11 +233,77 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 		var currentRoute = currentRoutesSet[$index];
 		currentRoute.display.setOptions({polylineOptions: {
 			    strokeColor: '#0000FF',
-			    strokeOpacity: 0.8,
-			    strokeWeight: 6,
-				zIndex: 1
+			    strokeOpacity: 1,
+			    strokeWeight: 4,
+				
 		    }}); 
 			currentRoute.display.setMap(map);
-			$event.currentTarget.setAttribute("style", "background-color:white;")
+			//$event.currentTarget.setAttribute("style", "background-color:white;")
+	}
+
+	//next button functionality
+	$scope.showNext = function(){
+		if($scope.showDefault == true){
+		    $state.go('commuteMap');
+			$scope.showDefault = false;		
+		}
+		else if($scope.showCarType == true){
+    		$('#chooseCarTypeBlock').fadeOut('slow', function(){
+		        $('#cylindersBlock').fadeIn('slow');
+		    });
+    		$scope.showCylinders = true;
+			$scope.showCarType = false;
+		}
+		else if($scope.showCylinders == true){
+			$('#cylindersBlock').fadeOut('slow', function(){
+		        $('#commuteFrequency').fadeIn('slow');
+		    });
+			$scope.showCylinders = false;
+			$scope.commuteFrequency = true;
+		}
+		else if($scope.commuteFrequency == true){
+			$('#commuteFrequency').fadeOut('slow', function(){
+		        $('#almostDone').fadeIn('slow');
+		    });
+			$scope.commuteFrequency = false;
+			$scope.almostDone = true;
+		}
+		else if($scope.almostDone == true){
+			$scope.almostDone = false;
+			$state.go('commuteMap');
+		}
+	}
+
+	//showPrevious functionality
+
+	$scope.showPrevious = function(){
+		if($scope.showCylinders == true){
+			$('#cylindersBlock').fadeOut('slow', function(){
+		        $('#survey').fadeIn('slow');
+		    });
+    		$scope.showCylinders = false;
+			$scope.showCarType = true;
+		}
+		else if($scope.commuteFrequency == true){
+			$('#commuteFrequency').fadeOut('slow', function(){
+		        $('#cylindersBlock').fadeIn('slow');
+		    });
+		    $scope.showCylinders = true;
+		    $scope.commuteFrequency = false;
+		}
+		else if($scope.almostDone == true){
+			$('#almostDone').fadeOut('slow', function(){
+		        $('#commuteFrequency').fadeIn('slow');
+		    });
+			$scope.commuteFrequency = true;
+			$scope.almostDone = false;
+		}
+	}
+
+	//Show Car Emissions on collecting car details and clicking on next button.
+	$scope.calculateCarEmissions = function(){
+		$scope.carDetailsStored = true;
+		$scope.questionsWrapper = false;
+		$scope.showCalculations = true;
 	}
 }

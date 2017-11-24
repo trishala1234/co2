@@ -7,7 +7,6 @@
 		<div>Enter your frequent start and destination point.</div>
 	</div>
 	<button type="button" id="checkMapBtn" class="btn" ng-click="checkMap()">Check Now</button>
-	<button type="button" id="showPreviousStateBtn" class="btn" ng-click="showPreviousState()">Back</button>
 	
 </div>
 <div id="mapDetailsModal" class="col-lg-12 modal">
@@ -35,11 +34,52 @@
 	    	</ui-gmap-google-map>
 		</div>
 	</div>		
-	<button type="button" id="showCalculationsBtn" class="btn" ng-click="calculateCarbon()" ng-hide="showCalculations">How Much Co2?</button>
+	<button type="button" id="showCalculationsBtn" class="btn" ng-click="calculateCarbon()" ng-hide="showCalculations || questionsWrapper">How Much Co2?</button>
+	<div id="questionsWrapper" ng-show="questionsWrapper">
+		<div id="chooseCarTypeBlock" class="hidingBlocks">
+		<div>Choose your car type.</div>
+		<div class="dropdown">
+			<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="carTypeBtn">{{displayCarType}} <span class="caret"></span></button>
+			<ul class="dropdown-menu">
+			    <li ng-repeat="cartype in carTypes" ng-click="storeCarType(cartype)"><a href="#">{{cartype}}</a></li>
+			 </ul>
+		</div>
+		</div>
+		<div id="cylindersBlock" class="hidingBlocks">
+			<div>Do you know how many cylinders it has?</div>
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="carTypeBtn">{{displayCylinders}} <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				    <li ng-repeat="num in cylinderNum" ng-click="storeCylinderNum(num)"><a href="#">{{num}}</a></li>
+				 </ul>
+			</div>
+			<div class="popover">
+				<span>
+					That's okay! We will give you an estimated average, but do remember that the exact imapct your car cause may vary.
+				</span>
+			</div>
+		</div>
+		<div id="commuteFrequency" class="hidingBlocks">
+			<div>Tell us how frequently do you commute.</div>
+			<div class="dropdown">
+				<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="carTypeBtn">{{displayCommuteFrequency}} <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				    <li ng-repeat="frequency in commuteFrequencyVals" ng-click="storeCommuteFrequency(frequency)"><a href="#">{{frequency}}</a></li>
+				 </ul>
+			</div>
+		</div>
+		<button type="button" id="nextBtn" class="btn" ng-click="calculateCarEmissions()">Next</button>
+		<button type="button" id="nextBtn" class="btn" ng-hide="showCylinders!=true || commuteFrequency != true || almostDone != true" ng-click="showPrevious()">Back</button>
+	</div>
+	
 	<div id="calculationsContainer" ng-show="showCalculations">
 		<ul>
 			<li ng-repeat="route in routes" ng-mouseover="highlightRoute($index, $event)" ng-mouseleave="fadeRoute($index, $event)">
-				route{{$index}} {{route.legs[0].arrival_time}}
+				<span class="material-icons" ng-show="travelModeValue === 'BUS'">directions_bus</span>
+				<span class="material-icons" ng-show="travelModeValue === 'DRIVING'">directions_car</span>
+				<span class="material-icons" ng-show="travelModeValue === 'TRAIN'">directions_railway</span>
+				<span class="routeDetails">Route {{$index}}</span>
+				<!-- <span>route{{$index}} {{route.legs[0].arrival_time}}</span> -->
 			</li>
 		</ul>
 	</div>
