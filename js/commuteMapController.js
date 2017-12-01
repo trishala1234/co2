@@ -8,7 +8,7 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 	  }
 
 	  $scope.map = {control : {}, center: {latitude: 40.1451, longitude: -99.6680 }, zoom: 4, bounds: {}};
-	  $scope.routes= [];
+	    $scope.routes = [];
 	    $scope.polylines = [];
 	    $scope.showNextBtn = false;
 	    var currentRoutesSet = [];
@@ -21,6 +21,7 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 		$scope.displayCylinders = "No Of Cylinders";
 		$scope.displayCommuteFrequency = "Commute Frequency";
 		$scope.carDetailsStored = false;
+		$scope.checkedMode = false;
        uiGmapIsReady.promise().then(function(map_instances){
        		
        		debugger;
@@ -39,13 +40,19 @@ function commuteMapController($scope, $state, uiGmapIsReady){
         			directionsCollection[i].setMap(null);
         		}
         		map = $scope.map.control.getGMap();
+        		//clearing the initially loaded routes.
+        		$scope.routes = [];
+        		$scope.OriginValue = "";
+		        $scope.DestinationValue = "";
+		        $scope.checkedMode = false;
+		        //document.getElementById('mode-selector').reset)(;
 			}
 
         	function AutocompleteDirectionsHandler(map) {
 		        this.map = map;
 		        this.originPlaceId = null;
 		        this.destinationPlaceId = null;
-		        this.travelMode = 'WALKING';
+		        this.travelMode = '';
 		        var originInput = document.getElementById('origin-input');
 		        var destinationInput = document.getElementById('destination-input');
 		        var modeSelector = document.getElementById('mode-selector');
@@ -215,6 +222,7 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 
 	//to highlight a route when user hovers over a route
 	$scope.highlightRoute = function($index, $event){
+		$scope.carbonValue = undefined;
 		var currentRoute = currentRoutesSet[$index];
 		currentRoute.display.setOptions({polylineOptions: {
 		    strokeColor: 'red',
@@ -224,6 +232,21 @@ function commuteMapController($scope, $state, uiGmapIsReady){
     	}}); 
 	
 		currentRoute.display.setMap(map);
+		if($scope.travelModeValue === "DRIVING"){
+			$scope.carbonValue = (((currentRoute.route.legs[0].distance.value)/1609.34)*.394).toFixed(1);
+			console.log($scope.carbonValue);
+			alert(currentRoute.route.legs[0].arrival_time.text);
+		}
+		else if($scope.travelModeValue === "BUS"){
+			$scope.carbonValue = (((currentRoute.route.legs[0].distance.value)/1609.34)*.045).toFixed(1);
+			console.log($scope.carbonValue);
+			alert(currentRoute.route.legs[0].arrival_time.text);
+		}
+		else if($scope.travelModeValue === "TRAIN"){
+			$scope.carbonValue = (((currentRoute.route.legs[0].distance.value)/1609.34)*.100).toFixed(1);
+			console.log($scope.carbonValue);
+			alert(currentRoute.route.legs[0].arrival_time.text);
+		}
 		//$event.currentTarget.setAttribute("style", "background-color:#fd8b49;border-radius:10px;")
 	}
 
@@ -238,6 +261,7 @@ function commuteMapController($scope, $state, uiGmapIsReady){
 				
 		    }}); 
 			currentRoute.display.setMap(map);
+			$scope.carbonValue = "";
 			//$event.currentTarget.setAttribute("style", "background-color:white;")
 	}
 
